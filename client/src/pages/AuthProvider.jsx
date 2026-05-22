@@ -16,7 +16,7 @@ function AuthProvider() {
       let name = response.user.displayName;
       let email = response.user.email;
       const result = await axios.post(ServerURL + '/api/auth/google', { name, email} , {withCredentials : true} );
-      console.log(result.data);
+      console.log('Google authentication successful:', result.data);
 
     } catch (error) {
       console.error("Google authentication failed:", error?.response?.data || error.message || error);
