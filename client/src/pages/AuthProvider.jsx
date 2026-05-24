@@ -8,8 +8,9 @@ import { linkWithCredential, signInWithPopup } from 'firebase/auth';
 import { ServerURL } from '../App';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
+import { setUserData } from '../redux/userSlice';
 
-function AuthProvider() {
+function AuthProvider( {isModel = false} ) {
   const dispatch = useDispatch();
   const handleGoogleAuth = async () => {
     try {
@@ -26,12 +27,12 @@ function AuthProvider() {
   };
 
   return (
-    <div className='w-full min-h-screen  bg-[#f3f3f3] flex items-center justify-center px-6 py-20'>
+    <div className={`w-full ${ isModel ? "py-4" : "min-h-screen  bg-[#f3f3f3] flex items-center justify-center px-6 py-20"}`}>
       <motion.div
         initial={{ opacity: 0, y: -40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.05, ease: "easeInOut" }}
-        className='w-full max-w-md p-8 rounded-3xl bg-white shadow-2xl border border-gray-200'>
+        className={`w-full ${isModel ? "max-w-md p-8 rounded-3xl" : "max-w-lg p-12 rounded-4xl" } bg-white shadow-2xl border border-gray-200'`}>
         <div className="flex items-center justify-center gap-3 mb-6">
           <div className='bg-black text-white p-2 rounded-lg'>
             <BsRobot size={18} />
@@ -48,14 +49,14 @@ function AuthProvider() {
         </h1>
         <p className='text-center text-gray-500 text-sm md:text-base leading-relaxed mb-8'>
           Sign in to start AI-powered mock interviews,
-          trackk your progress, and unlock personalized insights.
+          track your progress, and unlock personalized insights.
         </p>
 
         <motion.button
           onClick={handleGoogleAuth}
           whileHover={{ opacity: 0.8, scale: 1.03 }}
           whileTap={{ opacity: 1, scale: 0.98 }}
-          className='w-full flex item-center justify-center gap-3 py-3 bg-black text-white rounded-full shadow-md'>
+          className='w-full flex items-center justify-center gap-3 py-3 bg-black text-white rounded-full shadow-md'>
           <FcGoogle size={20} />
           Continue with Google
         </motion.button>
