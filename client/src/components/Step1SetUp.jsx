@@ -35,7 +35,7 @@ function Step1SetUp({ onStart }) {
             setExperience(result.data.experience || "");
             setSkills(result.data.skills || []);
             setProjects(result.data.projects || []);
-            setResumeText(result.data.resume_text || "");
+            setResumeText(result.data.resumeText || "");
             setAnalysisDone(true);
             setAnalyzing(false);
 
@@ -155,6 +155,36 @@ function Step1SetUp({ onStart }) {
                                         {analyzing ? "Analyzing..." : "Analyze Resume"}
                                     </motion.button>
                                 )}
+                            </motion.div>
+                        )}
+
+                        {analysisDone && (
+                            <motion.div
+                                intial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="bg-green-50 border border-gray-200 rounded-xl p-5 space-y-4">
+                                <h3 className="text-lg font-semibold text-green-800">Resume Analysis Result</h3>
+                                {projects.length > 0 && (
+                                    <div>
+                                        <p className="text-gray-700 font-medium mb-1">Projects :</p>
+                                        <ul className="list-disc list-inside text-gray-600 space-y-1">
+                                            {projects.map((proj, idx) => (
+                                                <li key={idx}>{proj}</li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
+                                {skills.length > 0 && (
+                                    <div>
+                                        <p className="text-gray-700 font-medium mb-1">Skills :</p>
+                                        <div className="flex flex-wrap gap-2">
+                                            {skills.map((skill, idx) => (
+                                                <span key={idx} className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">{skill}</span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
                             </motion.div>
                         )}
 
