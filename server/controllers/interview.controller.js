@@ -69,7 +69,7 @@ export const analyzeResume = async (req, res) => {
             experience: parsed.experience,
             projects: parsed.projects,
             skills: parsed.skills,
-            resume_text: resumeText
+            resumeText
         })
     } catch (error) {
         console.log(error);
