@@ -9,8 +9,12 @@ import {
 } from "react-icons/fa";
 import axios from "axios";
 import { ServerURL } from "../App";
+import { useDispatch, useSelector } from "react-redux";
+import { setUserData } from "../redux/userSlice";
 
 function Step1SetUp({ onStart }) {
+    const { userData } = useSelector((state) => state.user);
+    const dispatch = useDispatch();
     const [role, setRole] = useState("");
     const [experience, setExperience] = useState("");
     const [mode, setMode] = useState("Technical");
@@ -42,6 +46,27 @@ function Step1SetUp({ onStart }) {
         } catch (error) {
             console.error("Error analyzing resume:", error);
             setAnalyzing(false);
+        }
+    }
+
+    const handleStart = async() => {
+        if (!role?.trim() || !experience?.trim() || !mode?.trim()) {
+            console.error("Missing required interview fields:", { role, experience, mode });
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const result = await axios.post(ServerURL + "/api/interview/generate-questions", { role, experience, mode, resumeText, projects, skills }, { withCredentials: true });
+            console.log("Generated interview questions:", result.data);
+            if (userData) {
+                dispatch(setUserData({ ...userData, credits: result.data.creditsLeft }));
+            }
+            setLoading(false);
+            onStart(result.data);
+        } catch (error) {
+            console.error("Error generating interview questions:", error?.response?.data || error);
+            setLoading(false);
         }
     }
     return (
@@ -189,12 +214,13 @@ function Step1SetUp({ onStart }) {
                         )}
 
                         <motion.button
-                            disabled={!role || !experience}
+                        onClick={handleStart}   
+                            disabled={!role || !experience || loading}
                             whileHover={{ scale: 1.03 }}
                             whileTap={{ scale: 0.95 }}
                             className="w-full disabled:bg-gray-600 bg-green-600 hover:bg-green-700 text-white py-3 rounded-full text-lg font-semibold transition duration-300 shadow-md"
                         >
-                            Start Interview
+                            {loading ? "Starting...":"Start Interview"}
                         </motion.button>
 
                     </div>
