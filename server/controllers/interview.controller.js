@@ -166,9 +166,7 @@ export const generateQuestions = async (req, res) => {
             return res.status(500).json({ message: 'AI failed to generate questions.' });
         }
 
-        user.credits -= 50;
-        await user.save();
-
+        // Create interview first, then deduct credits to avoid charging on DB failures.
         const interview = await Interview.create({
             userId: user._id,
             role,
@@ -181,6 +179,19 @@ export const generateQuestions = async (req, res) => {
                 timeLimit: [60, 60, 90, 90, 120][index],
             }))
         });
+
+        try {
+            user.credits -= 50;
+            await user.save();
+        } catch (creditErr) {
+            // Rollback interview if we failed to deduct credits
+            try {
+                await Interview.findByIdAndDelete(interview._id);
+            } catch (delErr) {
+                console.error('Failed to rollback interview after credit deduction failure:', delErr);
+            }
+            return res.status(500).json({ message: 'Failed to deduct credits', error: creditErr.message });
+        }
 
         res.json({
             interviewId: interview._id,
@@ -288,12 +299,12 @@ export const submitAnswer = async (req, res) => {
             await interview.save();
             return res.status(200).json({ feedback: question.feedback });
         } catch (error) {
-            return res.status(500).json({ message: `Failed to submit answer ${error}` });
+            return res.status(500).json({ message : `Failed to parse AI response ${error}` });
         }
 
 
     } catch (error) {
-
+        return res.status(500).json({ message: `Failed to submit answer ${error}` });
     }
 }
 

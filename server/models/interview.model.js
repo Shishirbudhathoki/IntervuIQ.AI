@@ -36,9 +36,13 @@ const interviewScehma = new mongoose.Schema({
     },
     questions: [questionSchema],
     finalScore: {
+        type: Number,
+        default: 0,
+    },
+    status: {
         type: String,
-        enum : ["Incompleted", "completed"],
-        default : "Incompleted",
+        enum: ["incompleted", "completed"],
+        default: "incompleted",
     },
 }, { timestamps: true });
 
