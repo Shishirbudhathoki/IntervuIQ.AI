@@ -9,6 +9,9 @@ import { ServerURL } from "../App";
 import { BsArrowRight } from "react-icons/bs";
 
 function Step2Interview({ interviewData, onFinish }) {
+    if (!interviewData) {
+        return <div>Loading interview data...</div>;
+    }
     const { interviewId, questions, userName } = interviewData;
 
     const [isIntroPhase, setIsIntroPhase] = useState(true);
@@ -57,6 +60,7 @@ function Step2Interview({ interviewData, onFinish }) {
                 setVoiceGender("male");
                 return;
             }
+
 
         }
         loadVoices();
@@ -253,7 +257,7 @@ function Step2Interview({ interviewData, onFinish }) {
             onFinish(result.data);
         } catch (error) {
             console.error("Error finishing interview:", error);
-            onFinish(null);
+            alert("Failed to finish interview. Please try again.");
         }
     };
 
