@@ -299,7 +299,7 @@ export const submitAnswer = async (req, res) => {
             await interview.save();
             return res.status(200).json({ feedback: question.feedback });
         } catch (error) {
-            return res.status(500).json({ message : `Failed to parse AI response ${error}` });
+            return res.status(500).json({ message: `Failed to parse AI response ${error}` });
         }
 
 
@@ -355,5 +355,50 @@ export const finishInterview = async (req, res) => {
 
     } catch (error) {
         return res.status(500).json({ message: `Failed to finish interview ${error}` });
+    }
+}
+
+export const getInterviewHistory = async (req, res) => {
+    try {
+        const interviews = await Interview.find({ userId: req.userId }).sort({ createdAt: -1 }).select('role experience mode finalScore status createdAt');
+        return res.status(200).json(interviews);
+    } catch (error) {
+        res.status(500).json({ message: `Failed to get interview history ${error}` });
+    }
+}
+
+export const getInterviewReport = async (req, res) => {
+    try {
+        const interview = await Interview.findById(req.params.id);
+        if (!interview) {
+            return res.status(404).json({ message: 'Interview not found' });
+        }
+
+        const totalQuestions = interview.questions.length;
+        let totalConfidence = 0;
+        let totalCommunication = 0;
+        let totalCorrectness = 0;
+
+        interview.questions.forEach(q => {
+            totalConfidence += q.confidence;
+            totalCommunication += q.communication;
+            totalCorrectness += q.correctness;
+        });
+
+        const avgConfidence = totalQuestions ? totalConfidence / totalQuestions : 0;
+        const avgCommunication = totalQuestions ? totalCommunication / totalQuestions : 0;
+        const avgCorrectness = totalQuestions ? totalCorrectness / totalQuestions : 0;
+
+        return res.status(200).json({
+            finalScore: interview.finalScore,
+            confidence: Number(avgConfidence.toFixed(1)),
+            communication: Number(avgCommunication.toFixed(1)),
+            correctness: Number(avgCorrectness.toFixed(1)),
+            questionWiseScore: interview.questions
+        });
+
+
+    } catch (error) {
+        res.status(500).json({ message: `Failed to get interview report ${error}` });
     }
 }
