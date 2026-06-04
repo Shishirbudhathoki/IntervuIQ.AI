@@ -48,7 +48,7 @@ function InterviewHistory() {
                         </p>
                     </div>
                     :
-                    <div className="grid grid-3 gap-6">
+                    <div className="grid gap-6">
                         {interviews.map((item, index) =>
                         (<div
                             onClick={() => navigate(`/report/${item._id}`)}

@@ -42,7 +42,7 @@ function Step3Report({ report }) {
         performanceLevel = "Ready for job opportunities";
         shortTagLine = "Excellent clarity and structured responses.";
     } else if (finalScore >= 5) {
-        performanceLevel = "Need mijnor improvement before interviews.";
+        performanceLevel = "Need minor improvement before interviews.";
         shortTagLine = "Good foundation, refine articulation";
     } else {
         performanceLevel = "Significant improvement required.";
