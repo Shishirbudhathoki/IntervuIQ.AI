@@ -6,6 +6,9 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { setUserData } from './redux/userSlice';
 import InterviewPage from './pages/InterviewPage';
+import InterviewHistory from './pages/InterviewHistory';
+import Pricing from './pages/Pricing';
+import InterviewReport from './pages/InterviewReport';
 
 export const ServerURL = 'http://localhost:8000'
 
@@ -33,6 +36,9 @@ function App() {
       <Route path="/" element={<HomePage />} />
       <Route path="/auth" element={<AuthProvider />} />
       <Route path="/interview" element={<InterviewPage />} />
+      <Route path="/history" element={<InterviewHistory />} />
+      <Route path="/report/:id" element={<InterviewReport />} />
+      <Route path="/pricing" element={<Pricing />} />
     </Routes>
   )
 }
