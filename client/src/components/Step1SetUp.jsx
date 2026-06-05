@@ -185,7 +185,7 @@ function Step1SetUp({ onStart }) {
 
                         {analysisDone && (
                             <motion.div
-                                intial={{ opacity: 0, y: 20 }}
+                                initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 className="bg-green-50 border border-gray-200 rounded-xl p-4 space-y-2">
                                 <h3 className="text-lg font-semibold text-green-800">Resume Analysis Result</h3>

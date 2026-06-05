@@ -105,7 +105,7 @@ function Step3Report({ report }) {
         } else if (finalScore >= 5) {
             advice = "Good foundation shown. Improve clarity and structure. Practice delivering concise, confident answers with stronger supporting examples.";
         } else {
-            advice = "Significant improvement required. Focus on structured thinking, clarity, and comfident delivery. Practice answering aloud regularly.";
+            advice = "Significant improvement required. Focus on structured thinking, clarity, and confident delivery. Practice answering aloud regularly.";
         }
 
         doc.setFillColor(255, 255, 255);
