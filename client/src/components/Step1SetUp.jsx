@@ -74,7 +74,7 @@ function Step1SetUp({ onStart }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6 }}
-            className="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-100 to-gray-200 px-4">
+            className="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-100 to-gray-200 px-4 ">
             <div className="w-full max-w-4xl bg-white rounded-3xl shadow-2xl grid md:grid-cols-2 overflow-hidden">
                 <motion.div
                     initial={{ x: -80, opacity: 0 }}
@@ -125,10 +125,10 @@ function Step1SetUp({ onStart }) {
                     initial={{ x: 80, opacity: 0 }}
                     animate={{ x: 0, opacity: 1, }}
                     transition={{ duration: 0.7 }}
-                    className="p-8 bg-white"
+                    className="px-6 py-3 bg-white"
                 >
-                    <h2 className="text-3xl font-bold text-gray-800 mb-8">Interview SetUp</h2>
-                    <div className="space-y-6">
+                    <h2 className="text-3xl font-bold text-gray-800 mb-4">Interview SetUp</h2>
+                    <div className="space-y-4">
                         <div className='relative'>
                             <FaUserTie className="absolute top-4 left-2 text-gray-400 " />
                             <input
@@ -187,7 +187,7 @@ function Step1SetUp({ onStart }) {
                             <motion.div
                                 intial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="bg-green-50 border border-gray-200 rounded-xl p-5 space-y-4">
+                                className="bg-green-50 border border-gray-200 rounded-xl p-4 space-y-2">
                                 <h3 className="text-lg font-semibold text-green-800">Resume Analysis Result</h3>
                                 {projects.length > 0 && (
                                     <div>
@@ -218,7 +218,7 @@ function Step1SetUp({ onStart }) {
                             disabled={!role || !experience || loading}
                             whileHover={{ scale: 1.03 }}
                             whileTap={{ scale: 0.95 }}
-                            className="w-full disabled:bg-gray-600 bg-green-600 hover:bg-green-700 text-white py-3 rounded-full text-lg font-semibold transition duration-300 shadow-md"
+                            className="w-full disabled:bg-gray-600 bg-green-600 hover:bg-green-700 text-white py-2.5 rounded-full text-lg font-semibold transition duration-300 shadow-md"
                         >
                             {loading ? "Starting...":"Start Interview"}
                         </motion.button>
