@@ -61,7 +61,7 @@ function Navbar() {
             {showCreditPopup && (
               <div className="absolute -right-12.5 mt-3 w-64 bg-white shadow-xl border border-gray-200 rounded-xl p-5 z-50">
                 <p className="text-sm text-gray-700">Need more credits to continue interviews?</p>
-                <button onClick={() => navigate('/priceing')}
+                <button onClick={() => navigate('/pricing')}
                   className="w-full bg-black text-white py-2 rounded-lg text-sm">Buy more credits</button>
               </div>
             )}
