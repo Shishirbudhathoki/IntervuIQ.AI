@@ -58,7 +58,7 @@ function Step1SetUp({ onStart }) {
         setLoading(true);
         try {
             const result = await axios.post(ServerURL + "/api/interview/generate-questions", { role, experience, mode, resumeText, projects, skills }, { withCredentials: true });
-            console.log("Generated interview questions:", result.data);
+            // console.log("Generated interview questions:", result.data);
             if (userData) {
                 dispatch(setUserData({ ...userData, credits: result.data.creditsLeft }));
             }

@@ -10,7 +10,8 @@ import InterviewHistory from './pages/InterviewHistory';
 import Pricing from './pages/Pricing';
 import InterviewReport from './pages/InterviewReport';
 
-export const ServerURL = 'http://localhost:8000'
+export const ServerURL =
+  import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 function App() {
   const dispatch = useDispatch();
@@ -21,7 +22,7 @@ function App() {
         const response = await axios.get(ServerURL + "/api/user/current-user",
           { withCredentials: true }
         );
-        console.log('Current user data:', response.data);
+        // console.log('Current user data:', response.data);
         dispatch(setUserData(response.data));
       } catch(error) {
         console.error('Error fetching current user:', error);

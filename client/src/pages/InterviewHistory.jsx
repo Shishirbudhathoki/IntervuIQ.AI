@@ -12,7 +12,7 @@ function InterviewHistory() {
         const getMyInterviews = async () => {
             try {
                 const res = await axios(ServerURL + '/api/interview/get-interview', { withCredentials: true });
-                console.log(res.data);
+                // console.log(res.data);
                 setInterviews(res.data);
             } catch (error) {
                 console.log(error);

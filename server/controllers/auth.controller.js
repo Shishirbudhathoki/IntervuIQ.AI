@@ -12,7 +12,7 @@ export const googleAuth = async(req, res) => {
         if (!token) {
             return res.status(400).json({ message: 'Google token is required' });
         }
-        res.cookie('token', token, { httpOnly: true, secure: false, sameSite: 'Strict', maxAge: 1 * 60 * 60 * 1000 });
+        res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', maxAge: 1 * 60 * 60 * 1000 });
         return res.status(200).json(user);
     } catch (error) {
         console.error('Error during Google authentication:', error);

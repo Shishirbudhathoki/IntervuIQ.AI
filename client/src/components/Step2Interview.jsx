@@ -9,9 +9,7 @@ import { ServerURL } from "../App";
 import { BsArrowRight } from "react-icons/bs";
 
 function Step2Interview({ interviewData, onFinish }) {
-    if (!interviewData) {
-        return <div>Loading interview data...</div>;
-    }
+
     const { interviewId, questions, userName } = interviewData;
 
     const [isIntroPhase, setIsIntroPhase] = useState(true);
@@ -31,7 +29,14 @@ function Step2Interview({ interviewData, onFinish }) {
     const [subtitle, setSubtitle] = useState("");
 
     const videoRef = useRef(null);
+    const finalTranscriptRef = useRef("");
+    const isMicOnRef = useRef(isMicOn);
+    const isAISpeakingRef = useRef(isAISpeaking);
     const currentQuestion = questions[currentIndex];
+
+    if (!interviewData) {
+        return <div>Loading interview data...</div>;
+    }
 
     useEffect(() => {
         const loadVoices = () => {
@@ -90,22 +95,39 @@ function Step2Interview({ interviewData, onFinish }) {
             utterance.volume = 1;
 
             utterance.onstart = () => {
+                isAISpeakingRef.current = true;
                 setIsAISpeaking(true);
                 stopMic();
                 videoRef.current?.play();
             }
             utterance.onend = () => {
                 videoRef.current?.pause();
-                videoRef.current.currentTime = 0;
+                if (videoRef.current) videoRef.current.currentTime = 0;
+                isAISpeakingRef.current = false;
                 setIsAISpeaking(false);
-                if (isMicOn) {
-                    startMic();
-                }
+
+                setTimeout(() => {
+                    if (isMicOnRef.current) {
+                        startMic();
+                    }
+                }, 400);
 
                 setTimeout(() => {
                     setSubtitle("");
                     resolve();
                 }, 300);
+            };
+
+            utterance.onerror = (e) => {
+                if (e.error !== "interrupted" && e.error !== "canceled") {
+                    console.error("Speech synthesis error:", e);
+                }
+                videoRef.current?.pause();
+                if (videoRef.current) videoRef.current.currentTime = 0;
+                isAISpeakingRef.current = false;
+                setIsAISpeaking(false);
+                setSubtitle("");
+                resolve(); // resolve anyway so awaiting code never hangs forever
             };
 
             setSubtitle(text);
@@ -171,15 +193,44 @@ function Step2Interview({ interviewData, onFinish }) {
         recognition.interimResults = true;
 
         recognition.onresult = (event) => {
-            const transcript =
-                event.results[event.results.length - 1][0].transcript.trim();
-            setAnswer(transcript);
+            if (isAISpeakingRef.current) return;
+            let interimTranscript = "";
+
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                const result = event.results[i];
+                if (result.isFinal) {
+                    finalTranscriptRef.current += result[0].transcript + " ";
+                } else {
+                    interimTranscript += result[0].transcript;
+                }
+            }
+
+            setAnswer((finalTranscriptRef.current + interimTranscript).trim());
         };
+
+        recognition.onend = () => {
+            if (isMicOnRef.current && !isAISpeakingRef.current) {
+                try {
+                    recognition.start();
+                } catch (error) {
+                    console.error("Error restarting speech recognition:", error);
+                }
+            }
+        };
+
         recognitionRef.current = recognition;
     }, []);
 
+    useEffect(() => {
+        isMicOnRef.current = isMicOn;
+    }, [isMicOn]);
+
+    useEffect(() => {
+        isAISpeakingRef.current = isAISpeaking;
+    }, [isAISpeaking]);
+
     const startMic = () => {
-        if (recognitionRef.current && !isAISpeaking) {
+        if (recognitionRef.current && !isAISpeakingRef.current) {
             try {
                 recognitionRef.current.start();
             } catch (error) {
@@ -190,14 +241,16 @@ function Step2Interview({ interviewData, onFinish }) {
 
     const stopMic = () => {
         if (recognitionRef.current) {
-            recognitionRef.current.stop();
+            recognitionRef.current.abort();
         }
     };
 
     const toggleMic = () => {
         if (isMicOn) {
             stopMic();
+            isMicOnRef.current = false;
         } else {
+            isMicOnRef.current = true;
             startMic();
         }
         setIsMicOn(!isMicOn);
@@ -206,6 +259,7 @@ function Step2Interview({ interviewData, onFinish }) {
 
     const submitAnswer = async () => {
         if (isSubmitting) return;
+        isMicOnRef.current = false;
         stopMic();
         setIsSubmitting(true);
         try {
@@ -222,20 +276,24 @@ function Step2Interview({ interviewData, onFinish }) {
             // speakText(result.data.feedback);
             await speakText(result.data.feedback);
 
-            setIsSubmitting(false);
         } catch (error) {
             console.error("Error submitting answer:", error);
+            setIsSubmitting(false);
+        } finally {
             setIsSubmitting(false);
         }
     }
     const handleNext = async () => {
         setAnswer("");
+        finalTranscriptRef.current = "";
         setFeedback("");
         if (currentIndex + 1 >= questions.length) {
             finishInterview();
             return;
         }
 
+        isMicOnRef.current = isMicOn;
+        
         await speakText("Alright, let's move on to the next question.");
 
         setCurrentIndex(currentIndex + 1);
@@ -253,7 +311,7 @@ function Step2Interview({ interviewData, onFinish }) {
                     withCredentials: true
                 }
             );
-            console.log("Interview finished:", result.data);
+            // console.log("Interview finished:", result.data);
             onFinish(result.data);
         } catch (error) {
             console.error("Error finishing interview:", error);
@@ -273,7 +331,6 @@ function Step2Interview({ interviewData, onFinish }) {
     useEffect(() => {
         return () => {
             if (recognitionRef.current) {
-                recognitionRef.current.stop();
                 recognitionRef.current.abort();
             }
 
