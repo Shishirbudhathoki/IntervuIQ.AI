@@ -5,9 +5,14 @@
 </p>
 
 <p align="center">
-  <a href="https://intervu-iq-ai.vercel.app/">🌐 Live Demo</a> •
-  <a href="https://github.com/Shishirbudhoki/IntervuIQ.AI">💻 GitHub Repository</a>
+  <img src="docs/screenshots/home.png" alt="IntervuIQ.AI home page" width="100%">
 </p>
+
+
+<p align="center">
+  <a href="https://intervu-iq-ai.vercel.app/">🌐 Try the Live Demo</a>
+</p>
+
 
 ---
 
@@ -30,18 +35,6 @@ Users can select a job role and experience level, start an AI-driven technical i
 - 🔐 **Google Authentication** — Sign in securely using Google.
 - 📱 **Responsive UI** — Designed for a smooth experience across screen sizes.
 
-## 🛠️ Tech Stack
-
-| Category | Technologies |
-|---|---|
-| Frontend | React.js, JavaScript, HTML5, CSS3 |
-| Styling | Tailwind CSS |
-| Backend | Node.js, Express.js |
-| Database | MongoDB |
-| AI / LLM | OpenRouter (`openai/gpt-4o-mini`) |
-| Authentication | Firebase Authentication with Google provider and JWT cookies |
-| Voice | Browser Speech Synthesis and Web Speech API |
-| Deployment | Vercel (frontend) |
 
 ## 🔄 How It Works
 
@@ -84,7 +77,7 @@ Users can select a job role and experience level, start an AI-driven technical i
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/Shishirbudhoki/IntervuIQ.AI.git
+git clone https://github.com/Shishirbudhathoki/IntervuIQ.AI
 cd IntervuIQ.AI
 ```
 
@@ -169,17 +162,6 @@ IntervuIQ.AI/
 ```
 
 The payment routes and Khalti integration are present in the server code but are currently disabled in `server/index.js`.
-
-## 🌐 Links
-
-- **Live Website:** https://intervu-iq-ai.vercel.app/
-- **GitHub Repository:** https://github.com/Shishirbudhoki/IntervuIQ.AI
-
-## 👨‍💻 Author
-
-**Shishir Budhathoki**
-
-GitHub: https://github.com/Shishirbudhoki
 
 ---
 
