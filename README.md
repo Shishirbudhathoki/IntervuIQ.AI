@@ -1,17 +1,11 @@
 # ✨ IntervuIQ.AI — AI-Powered Mock Interview Platform
 
 <p align="center">
-  <strong>Practice interviews. Get AI feedback. Improve your confidence.</strong>
-</p>
-
-<p align="center">
   <img src="docs/screenshots/home.png" alt="IntervuIQ.AI home page" width="100%">
 </p>
 
 
-<p align="center">
-  <a href="https://intervu-iq-ai.vercel.app/">🌐 Try the Live Demo</a>
-</p>
+**Live demo:** [https://intervu-iq-ai.vercel.app/](https://intervu-iq-ai.vercel.app/)
 
 
 ---
@@ -48,27 +42,27 @@ Users can select a job role and experience level, start an AI-driven technical i
 
 ## 📸 Screenshots
 
-### 🔐 Google Sign-In
+Google Sign-In:
 
 ![Google Sign-In](docs/screenshots/login.png)
 
-### 🏠 Home Page
+Home Page:
 
 ![IntervuIQ.AI Home Page](docs/screenshots/home.png)
 
-### ⚙️ Interview Setup
+Interview Setup:
 
 ![Interview Setup](docs/screenshots/interview-setup.png)
 
-### 🤖 AI Smart Interview
+AI Smart Interview:
 
 ![AI Smart Interview](docs/screenshots/ai-interview.png)
 
-### 📊 Interview Analytics Dashboard
+Interview Analytics Dashboard:
 
 ![Interview Analytics Dashboard](docs/screenshots/analytics.png)
 
-### 📚 Interview History
+Interview History:
 
 ![Interview History](docs/screenshots/history.png)
 
