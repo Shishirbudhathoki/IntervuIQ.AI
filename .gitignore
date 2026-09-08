@@ -4,4 +4,5 @@ server/routes/payment.route.js
 server/models/payment.model.js
 server/controllers/payment.controller.js
 server/services/khalti.services.js
+docs/
 

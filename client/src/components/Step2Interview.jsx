@@ -30,6 +30,7 @@ function Step2Interview({ interviewData, onFinish }) {
 
     const videoRef = useRef(null);
     const finalTranscriptRef = useRef("");
+    const answerRef = useRef("");
     const isMicOnRef = useRef(isMicOn);
     const isAISpeakingRef = useRef(isAISpeaking);
     const currentQuestion = questions[currentIndex];
@@ -205,7 +206,9 @@ function Step2Interview({ interviewData, onFinish }) {
                 }
             }
 
-            setAnswer((finalTranscriptRef.current + interimTranscript).trim());
+            const transcript = (finalTranscriptRef.current + interimTranscript).trim();
+            answerRef.current = transcript;
+            setAnswer(transcript);
         };
 
         recognition.onend = () => {
@@ -257,8 +260,13 @@ function Step2Interview({ interviewData, onFinish }) {
     };
 
 
-    const submitAnswer = async () => {
+    const submitAnswer = async ({ allowEmpty = false } = {}) => {
         if (isSubmitting) return;
+        const submittedAnswer = answerRef.current.trim();
+        if (!allowEmpty && !submittedAnswer) {
+            alert("Please provide an answer before submitting.");
+            return;
+        }
         isMicOnRef.current = false;
         stopMic();
         setIsSubmitting(true);
@@ -268,7 +276,7 @@ function Step2Interview({ interviewData, onFinish }) {
                     interviewId,
                     questionIndex: currentIndex,
                     timeTaken: currentQuestion.timeLimit - timeLeft,
-                    answer
+                    answer: submittedAnswer
                 }, {
                 withCredentials: true
             });
@@ -284,6 +292,7 @@ function Step2Interview({ interviewData, onFinish }) {
         }
     }
     const handleNext = async () => {
+        answerRef.current = "";
         setAnswer("");
         finalTranscriptRef.current = "";
         setFeedback("");
@@ -324,7 +333,7 @@ function Step2Interview({ interviewData, onFinish }) {
         if (!currentQuestion) return;
 
         if (timeLeft === 0 && !isSubmitting && !feedback) {
-            submitAnswer();
+            submitAnswer({ allowEmpty: true });
         }
     }, [timeLeft]);
 
@@ -411,7 +420,10 @@ function Step2Interview({ interviewData, onFinish }) {
                     <textarea
                         placeholder="Type your answer here..."
                         disabled={isMicOn}
-                        onChange={(e) => setAnswer(e.target.value)}
+                        onChange={(e) => {
+                            answerRef.current = e.target.value;
+                            setAnswer(e.target.value);
+                        }}
                         value={answer}
                         className="flex-1 bg-gray-100 p-4 sm:p-6 rounded-2xl resize-none outline-none border border-gray-200 focus:ring-2 focus:ring-emerald-500 transition text-gray-800"
                     />
